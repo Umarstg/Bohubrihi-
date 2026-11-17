@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বহুব্রীহি | Bohubrihi - রুম ম্যানেজমেন্ট ও ক্লিনিং হাজিরা</title>
+    <!-- Google Fonts for Bengali -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for clean icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0284c7">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230284c7'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='46' fill='url(%23g)'/%3E%3Cpath d='M35 50 C 35 30, 65 30, 65 50 C 65 70, 35 70, 35 50 Z' fill='none' stroke='white' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='50' r='7' fill='white'/%3E%3Cpath d='M50 20 L50 28 M50 72 L50 80 M20 50 L28 50 M72 50 L80 50' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 100 100" class="logo-svg">
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0284c7" />
+                                <stop offset="100%" stop-color="#10b981" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="46" fill="url(#logoGrad)" />
+                        <!-- Abstract Bohubrihi / Infinity / Unity loop -->
+                        <path d="M32 50 C 32 34, 68 34, 68 50 C 68 66, 32 66, 32 50 Z" fill="none" stroke="white" stroke-width="6" stroke-linecap="round" />
+                        <circle cx="50" cy="50" r="6" fill="white" />
+                        <!-- Sprout / Clean leaf indicator -->
+                        <path d="M50 22 C 55 28, 60 30, 50 38 C 40 30, 45 28, 50 22 Z" fill="#bbf7d0" />
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>বহুব্রীহি</h1>
+                    <span class="tagline">রুমমেট ও ক্লিনিং অ্যাসিস্ট্যান্ট</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="dashboard">
+                    <i class="fa-solid fa-broom"></i>
+                    <span>আজকের হাজিরা ও ড্যাশবোর্ড</span>
+                </button>
+                <button class="nav-item" data-tab="schedule">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>ক্লিনিং শিডিউল</span>
+                </button>
+                <button class="nav-item" data-tab="notices">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <span>নোটিশ বোর্ড</span>
+                    <span class="badge" id="noticeBadge">০</span>
+                </button>
+                <button class="nav-item" data-tab="fines">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>জরিমানা ও বকেয়া</span>
+                    <span class="badge badge-warning" id="fineBadge">০</span>
+                </button>
+                <button class="nav-item" data-tab="members">
+                    <i class="fa-solid fa-users"></i>
+                    <span>রুমের সদস্যগণ</span>
+                </button>
+                <button class="nav-item" data-tab="settings">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>সেটিংস ও ব্যাকআপ</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="room-pill">
+                    <i class="fa-solid fa-door-open"></i>
+                    <span id="roomNameDisplay">রুম নং: ২০৪</span>
+                </div>
+                <p class="footer-note">সুন্দর ও পরিচ্ছন্ন রুমের জন্য</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Mobile Top Bar -->
+            <header class="mobile-header">
+                <div class="mobile-brand">
+                    <div class="logo-mini"></div>
+                    <h2>বহুব্রীহি</h2>
+                </div>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </header>
+
+            <!-- Top Notification Banner -->
+            <div id="stickyPinnedNotice" class="sticky-notice hidden">
+                <div class="sticky-notice-content">
+                    <i class="fa-solid fa-thumbtack pin-icon"></i>
+                    <div>
+                        <strong id="pinnedTitle">জরুরি নোটিশ:</strong>
+                        <span id="pinnedText">নোটিশ লোড হচ্ছে...</span>
+                    </div>
+                </div>
+                <button class="btn-close-notice" id="closePinnedNotice">&times;</button>
+            </div>
+
+            <!-- TAB 1: DASHBOARD & ATTENDANCE -->
+            <section id="tab-dashboard" class="tab-content active">
+                <div class="welcome-bar">
+                    <div>
+                        <h2 class="section-title">স্বাগতম! আজকের ক্লিনিং স্ট্যাটাস</h2>
+                        <p class="section-subtitle" id="currentDateFormatted">তারিখ লোড হচ্ছে...</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="switchTab('notices')">
+                        <i class="fa-solid fa-plus"></i> নোটিশ দিন
+                    </button>
+                </div>
+
+                <!-- Today's Cleaner Hero Card -->
+                <div class="card hero-cleaner-card" id="todayHeroCard">
+                    <div class="hero-header">
+                        <div class="badge-today">আজকের দায়িত্ব</div>
+                        <div class="status-indicator" id="todayStatusIndicator">
+                            <span class="status-dot pending"></span>
+                            <span class="status-text" id="todayStatusText">এখনও সম্পন্ন হয়নি</span>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-body">
+                        <div class="cleaner-avatar" id="heroAvatar">স</div>
+                        <div class="cleaner-info">
+                            <h3 id="heroCleanerName">সদস্যের নাম</h3>
+                            <p id="heroTaskDetail"><i class="fa-solid fa-sparkles"></i> পুরো রুম ও বারান্দা ঝাড়ু দেওয়া</p>
+                        </div>
+                    </div>
+
+                    <!-- Big Attendance Checkbox/Button -->
+                    <div class="hero-action">
+                        <button class="btn-attendance" id="toggleAttendanceBtn">
+                            <div class="checkbox-circle" id="attendanceCheckCircle">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="btn-attendance-text">
+                                <span class="action-title" id="attendanceActionTitle">রুম ঝাড়ু দেওয়া হয়েছে (হাজিরা টিক দিন)</span>
+                                <span class="action-sub" id="attendanceActionSub">ক্লিক করে আজকের হাজিরা নিশ্চিত করুন</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="hero-meta" id="completionMetaInfo" style="display: none;">
+                        <i class="fa-solid fa-circle-check text-green"></i> 
+                        <span id="completedAtText">আজ দুপুর ১২:৩০ মিনিটে সম্পন্ন করা হয়েছে</span>
+                    </div>
+                </div>
+
+                <!-- Next Cleaners Preview & Quick Stats Grid -->
+                <div class="grid-2col">
+                    <!-- Next Schedule Widget -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-calendar-check text-primary"></i>
+                                <h3>পরবর্তী ক্লিনিং শিডিউল</h3>
+                            </div>
+                            <button class="btn-link" onclick="switchTab('schedule')">সব দেখুন &rarr;</button>
+                        </div>
+                        <div class="upcoming-cleaners-list" id="upcomingPreviewList">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Fine & Dues Snapshot Widget -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-hand-holding-dollar text-green"></i>
+                                <h3>বকেয়া জরিমানা সারসংক্ষেপ</h3>
+                            </div>
+                            <button class="btn-link" onclick="switchTab('fines')">বিস্তারিত &rarr;</button>
+                        </div>
+                        <div class="fine-snapshot-body" id="fineSnapshotBody">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Attendance History Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-clock-rotate-left text-primary"></i>
+                            <h3>সাম্প্রতিক ক্লিনিং হাজিরা খাতা</h3>
+                        </div>
+                        <span class="text-muted">গত ৭ দিনের রেকর্ড</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>তারিখ</th>
+                                    <th>সদস্যের নাম</th>
+                                    <th>স্ট্যাটাস</th>
+                                    <th>হাজিরার সময়</th>
+                                    <th>অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceHistoryTable">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: CLEANING SCHEDULE -->
+            <section id="tab-schedule" class="tab-content">
+                <div class="welcome-bar">
+                    <div>
+                        <h2 class="section-title">মাসিক ক্লিনিং শিডিউল ও প্ল্যানার</h2>
+                        <p class="section-subtitle">নতুন মাসের সম্পূর্ণ রোটেশন, তারিখভিত্তিক দায়িত্ব ও হাজিরা</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="openModal('modal-generate-month')">
+                            <i class="fa-solid fa-calendar-plus"></i> নতুন মাসের শিডিউল তৈরি করুন
+                        </button>
+                        <button class="btn btn-secondary" onclick="syncCurrentMonthToSheets()">
+                            <i class="fa-solid fa-cloud-arrow-up text-green"></i> শিডিউল গুগল শিটে পাঠান
+                        </button>
+                    </div>
+                </div>
+
+                <!-- My Next Schedule Banner -->
+                <div class="card my-schedule-highlight" id="myNextScheduleBanner">
+                    <div class="highlight-icon">
+                        <i class="fa-regular fa-bell"></i>
+                    </div>
+                    <div class="highlight-info">
+                        <h4>আপনার পরবর্তী ঝাড়ুর দিন কবে জানতে চান?</h4>
+                        <p>সদস্য তালিকা থেকে আপনার নামটি সিলেক্ট করুন:</p>
+                        <select id="userSelectorDropdown" class="form-select user-select">
+                            <option value="">-- আপনার নাম বেছে নিন --</option>
+                        </select>
+                        <div id="userMonthlyDatesList" style="margin-top:8px; font-size:0.88rem; color:var(--sky-700); font-weight:500;"></div>
+                    </div>
+                    <div class="highlight-result" id="userNextTurnResult">
+                        <span class="turn-label">পরবর্তী পালা:</span>
+                        <span class="turn-date" id="userNextTurnDate">-</span>
+                        <span class="turn-days-left" id="userDaysLeft">-</span>
+                    </div>
+                </div>
+
+                <!-- Month Selector Filter -->
+                <div class="card" style="padding:16px 24px; margin-bottom:16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <label style="font-weight:600; color:var(--slate-700);">মাস নির্বাচন করুন:</label>
+                            <select id="scheduleMonthSelector" class="form-select" style="width:auto; min-width:180px;">
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <span class="badge" id="monthlyScheduleStatsBadge" style="background:#e0f2fe; color:#0369a1; padding:6px 14px; font-size:0.85rem;">
+                            মোট দিন: ৩০ টি
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Full Monthly Schedule Table Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-calendar-days text-primary"></i>
+                            <h3 id="monthlyScheduleTableTitle">সম্পূর্ণ মাসের ক্লিনিং তালিকা</h3>
+                        </div>
+                        <span class="text-muted">সদস্য এসে নিজের নামের পাশে টিক দিয়ে হাজিরা নিশ্চিত করতে পারবে</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>তারিখ</th>
+                                    <th>বার (Day)</th>
+                                    <th>দায়িত্বপ্রাপ্ত সদস্য</th>
+                                    <th>হাজিরার স্ট্যাটাস</th>
+                                    <th>টিক দিন / অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthlyScheduleTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: NOTICE BOARD -->
+            <section id="tab-notices" class="tab-content">
+                <div class="welcome-bar">
+                    <div>
+                        <h2 class="section-title">রুমের নোটিশ বোর্ড</h2>
+                        <p class="section-subtitle">সকল ঘোষণা, নিয়ম ও আপডেট এক নজরে</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('modal-add-notice')">
+                        <i class="fa-solid fa-plus"></i> নতুন নোটিশ দিন
+                    </button>
+                </div>
+
+                <div class="notices-grid" id="noticesContainer">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- TAB 4: FINES & PENALTIES -->
+            <section id="tab-fines" class="tab-content">
+                <div class="welcome-bar">
+                    <div>
+                        <h2 class="section-title">জরিমানা ও রুম ফান্ড</h2>
+                        <p class="section-subtitle">শিডিউল মিস বা নিয়মভঙ্গের বকেয়া ও আদায় ট্র্যাকার</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="openModal('modal-fine-rule')">
+                            <i class="fa-solid fa-scale-balanced"></i> জরিমানার নিয়ম
+                        </button>
+                        <button class="btn btn-primary" onclick="openModal('modal-add-fine')">
+                            <i class="fa-solid fa-plus"></i> জরিমানা যুক্ত করুন
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fine Overview Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card stat-sky">
+                        <div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div class="stat-meta">
+                            <span class="stat-label">মোট বকেয়া জরিমানা</span>
+                            <h3 class="stat-val" id="totalUnpaidFines">৳০</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-green">
+                        <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="stat-meta">
+                            <span class="stat-label">মোট আদায়কৃত জরিমানা</span>
+                            <h3 class="stat-val" id="totalPaidFines">৳০</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card stat-light">
+                        <div class="stat-icon"><i class="fa-solid fa-user-xmark"></i></div>
+                        <div class="stat-meta">
+                            <span class="stat-label">বকেয়া থাকা সদস্য</span>
+                            <h3 class="stat-val" id="membersWithDuesCount">০ জন</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unpaid Fines Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+                            <h3>বকেয়া জরিমানার তালিকা (আদায় হলে টিক দিন)</h3>
+                        </div>
+                        <span class="badge badge-warning" id="unpaidCountBadge">০ টি বকেয়া</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>সদস্যের নাম</th>
+                                    <th>তারিখ</th>
+                                    <th>কারণ</th>
+                                    <th>পরিমাণ</th>
+                                    <th>পরিশোধের টিক</th>
+                                    <th>অ্যাকশন</th>
+                                </tr>
+                            </thead>
+                            <tbody id="unpaidFinesTable">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Paid Fines History Section -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-receipt text-green"></i>
+                            <h3>আদায়কৃত জরিমানার ইতিহাস</h3>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>সদস্যের নাম</th>
+                                    <th>আদায়ের তারিখ</th>
+                                    <th>কারণ</th>
+                                    <th>পরিমাণ</th>
+                                    <th>স্ট্যাটাস</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paidFinesTable">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: MEMBERS -->
+            <section id="tab-members" class="tab-content">
+                <div class="welcome-bar">
+                    <div>
+                        <h2 class="section-title">রুমের সদস্য তালিকা</h2>
+                        <p class="section-subtitle">রুমের সকল সদস্য ও তাদের ব্যক্তিগত স্ট্যাটাস</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('modal-add-member')">
+                        <i class="fa-solid fa-user-plus"></i> নতুন সদস্য যোগ করুন
+                    </button>
+                </div>
+
+                <div class="members-grid" id="membersCardContainer">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- TAB 6: SETTINGS -->
+            <section id="tab-settings" class="tab-content">
+                <div class="welcome-bar">
+                    <div>
+                        <h2 class="section-title">অ্যাপ সেটিংস ও ব্যাকআপ</h2>
+                        <p class="section-subtitle">রুমের তথ্য ও ডাটা ম্যানেজমেন্ট</p>
+                    </div>
+                </div>
+
+                <div class="settings-grid">
+                    <!-- Google Sheets Cloud Sync -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-table-list text-green"></i>
+                                <h3>গুগল শিট জবাবদিহিতা ও ক্লাউড সিঙ্ক</h3>
+                            </div>
+                            <span class="badge" id="sheetStatusBadge" style="background:#e0f2fe; color:#0369a1;">লোকাল মোড</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">আপনার গুগল শিটের Web App URL টি এখানে দিন। ফোনের অ্যাপ থেকে যে কেউ হাজিরা টিক দিলে তা সরাসরি গুগল শিটে সেভ হবে এবং জবাবদিহিতা নিশ্চিত হবে।</p>
+                            <div class="form-group" style="margin-top:12px;">
+                                <label>Google Apps Script Web App URL</label>
+                                <input type="url" id="settingSheetUrl" class="form-input" placeholder="https://script.google.com/macros/s/.../exec">
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-primary" onclick="saveGoogleSheetSettings()">
+                                    <i class="fa-solid fa-link"></i> শিট কানেক্ট করুন
+                                </button>
+                                <button class="btn btn-secondary" onclick="openModal('modal-sheet-guide')">
+                                    <i class="fa-solid fa-circle-question"></i> সেটআপ গাইড
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Settings -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-gear text-primary"></i>
+                                <h3>সাধারণ তথ্য</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>রুম নম্বর / ফ্ল্যাট নাম</label>
+                                <input type="text" id="settingRoomName" class="form-input" placeholder="যেমন: ২০৪, পদ্মা মেস">
+                            </div>
+                            <div class="form-group">
+                                <label>শিডিউল মিস করলে ডিফল্ট জরিমানা (টাকা)</label>
+                                <input type="number" id="settingFineAmount" class="form-input" value="30">
+                            </div>
+                            <button class="btn btn-primary" onclick="saveGeneralSettings()">
+                                <i class="fa-solid fa-save"></i> সেটিংস সেভ করুন
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Backup & Share -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fa-solid fa-cloud-arrow-down text-green"></i>
+                                <h3>ডাটা ব্যাকআপ ও শেয়ার</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">আপনার রুমের সব ডাটা (শিডিউল, নোটিশ, জরিমানা) লোকাল মেমোরিতে সংরক্ষিত আছে। অন্য বন্ধুদের সাথে শেয়ার করতে এক্সপোর্ট করতে পারেন।</p>
+                            
+                            <div class="btn-vertical-group">
+                                <button class="btn btn-secondary" onclick="exportAppData()">
+                                    <i class="fa-solid fa-file-export"></i> ডাটা ফাইল ডাউনলোড করুন (Export JSON)
+                                </button>
+                                <label class="btn btn-secondary file-upload-btn">
+                                    <i class="fa-solid fa-file-import"></i> ব্যাকআপ ফাইল আপলোড করুন (Import JSON)
+                                    <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importAppData(event)">
+                                </label>
+                                <button class="btn btn-danger-outline" onclick="resetToDemoData()">
+                                    <i class="fa-solid fa-rotate-left"></i> ডেমো ডাটায় রিসেট করুন
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL 1: ADD NOTICE -->
+    <div class="modal-overlay" id="modal-add-notice">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-bullhorn text-primary"></i> নতুন নোটিশ প্রকাশ করুন</h3>
+                <button class="btn-close-modal" onclick="closeModal('modal-add-notice')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>নোটিশের শিরোনাম *</label>
+                    <input type="text" id="newNoticeTitle" class="form-input" placeholder="যেমন: শুক্রবার গ্র্যান্ড ক্লিনিং ও ডিপ পরিষ্কার">
+                </div>
+                <div class="form-group">
+                    <label>বিস্তারিত বিবরণ *</label>
+                    <textarea id="newNoticeBody" class="form-textarea" rows="4" placeholder="রুমের সবার জন্য নির্দেশনা লিখুন..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>প্রকাশকের নাম</label>
+                    <input type="text" id="newNoticeAuthor" class="form-input" placeholder="যেমন: মনিটর / সাকিব">
+                </div>
+                <div class="form-group-checkbox">
+                    <input type="checkbox" id="newNoticePinned">
+                    <label for="newNoticePinned">উপরে পিন করে রাখুন (জরুরি নোটিশ হিসেবে দেখাবে)</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-add-notice')">বাতিল</button>
+                <button class="btn btn-primary" onclick="submitNewNotice()">নোটিশ পোস্ট করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: ADD FINE -->
+    <div class="modal-overlay" id="modal-add-fine">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-receipt text-warning"></i> জরিমানা যুক্ত করুন</h3>
+                <button class="btn-close-modal" onclick="closeModal('modal-add-fine')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>সদস্য নির্বাচন করুন *</label>
+                    <select id="newFineMemberSelect" class="form-select">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>জরিমানার কারণ *</label>
+                    <input type="text" id="newFineReason" class="form-input" placeholder="যেমন: শিডিউল অনুযায়ী রুমে ঝাড়ু না দেওয়া">
+                </div>
+                <div class="form-group">
+                    <label>টাকার পরিমাণ (৳) *</label>
+                    <input type="number" id="newFineAmount" class="form-input" value="30">
+                </div>
+                <div class="form-group">
+                    <label>তারিখ</label>
+                    <input type="date" id="newFineDate" class="form-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-add-fine')">বাতিল</button>
+                <button class="btn btn-warning" onclick="submitNewFine()">জরিমানা যুক্ত করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: ADD MEMBER -->
+    <div class="modal-overlay" id="modal-add-member">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-plus text-primary"></i> নতুন সদস্য যোগ করুন</h3>
+                <button class="btn-close-modal" onclick="closeModal('modal-add-member')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>সদস্যের পুরো নাম *</label>
+                    <input type="text" id="newMemberName" class="form-input" placeholder="যেমন: তানভীর আহমেদ">
+                </div>
+                <div class="form-group">
+                    <label>মোবাইল নম্বর (ঐচ্ছিক)</label>
+                    <input type="text" id="newMemberPhone" class="form-input" placeholder="যেমন: 017xxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label>বেড নং বা নোট (ঐচ্ছিক)</label>
+                    <input type="text" id="newMemberBed" class="form-input" placeholder="যেমন: উত্তর পাশের বেড">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-add-member')">বাতিল</button>
+                <button class="btn btn-primary" onclick="submitNewMember()">সদস্য সংরক্ষণ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: FINE RULES -->
+    <div class="modal-overlay" id="modal-fine-rule">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-scale-balanced text-primary"></i> রুমের ক্লিনিং ও জরিমানার নিয়মাবলী</h3>
+                <button class="btn-close-modal" onclick="closeModal('modal-fine-rule')">&times;</button>
+            </div>
+            <div class="modal-body modal-rules-body">
+                <div class="rule-item">
+                    <div class="rule-num">১</div>
+                    <div class="rule-text">প্রতিদিন সকাল ১০টার মধ্যে রুম ঝাড়ু দেওয়া বাধ্যতামূলক। কোনো কারণবশত সকালে সম্ভব না হলে দুপুরের পূর্বে ঝাড়ু দিতে হবে।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">২</div>
+                    <div class="rule-text">ঝাড়ু দেওয়া শেষ করে অ্যাপে এসে "রুম ঝাড়ু দেওয়া হয়েছে" বাটনে টিক দিয়ে হাজিরা নিশ্চিত করতে হবে।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">৩</div>
+                    <div class="rule-text">কোনো সদস্য যদি না জানিয়ে পুরো দিন ঝাড়ু না দেয়, তবে তার একাউন্টে নির্ধারিত ৩০ টাকা জরিমানা যুক্ত হবে।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">৪</div>
+                    <div class="rule-text">জরুরি প্রয়োজনে পারস্পরিক আলোচনা সাপেক্ষে অন্য রুমমেটের সাথে শিডিউল অদলবদল করা যাবে।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">৫</div>
+                    <div class="rule-text">জরিমানার টাকা দিয়ে রুমের প্রয়োজনীয় জিনিস (যেমন: হারপিক, ঝাড়ু, ডাস্টবিন ব্যাগ, এয়ার ফ্রেশনার) কেনা হবে।</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal('modal-fine-rule')">বুঝেছি</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: GOOGLE SHEETS SETUP GUIDE -->
+    <div class="modal-overlay" id="modal-sheet-guide">
+        <div class="modal-box" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-table-list text-green"></i> গুগল শিট কানেক্ট করার সহজ গাইড</h3>
+                <button class="btn-close-modal" onclick="closeModal('modal-sheet-guide')">&times;</button>
+            </div>
+            <div class="modal-body modal-rules-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="rule-item">
+                    <div class="rule-num">১</div>
+                    <div class="rule-text">আপনার ব্রাউজারে একটি নতুন <strong>Google Sheet</strong> খুলুন (<a href="https://sheets.new" target="_blank" style="color:var(--sky-600);">sheets.new</a>)।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">২</div>
+                    <div class="rule-text">উপরের মেনু থেকে <strong>Extensions &gt; Apps Script</strong>-এ ক্লিক করুন।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">৩</div>
+                    <div class="rule-text">আপনার প্রজেক্ট ফোল্ডারের <code>google-apps-script.js</code> ফাইলের সম্পূর্ণ কোডটি কপি করে Apps Script এডিটরে পেস্ট করুন এবং <strong>Ctrl + S</strong> চেপে সেভ করুন।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">৪</div>
+                    <div class="rule-text">উপরে ডানপাশে <strong>Deploy &gt; New deployment</strong> বাটনে ক্লিক করুন। Type হিসেবে <strong>Web app</strong> সিলেক্ট করুন।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">৫</div>
+                    <div class="rule-text"><strong>Who has access</strong> ড্রপডাউনে অবশ্যই <strong>Anyone</strong> (যে কেউ) সিলেক্ট করবেন এবং Deploy করুন।</div>
+                </div>
+                <div class="rule-item">
+                    <div class="rule-num">৬</div>
+                    <div class="rule-text">প্রাপ্ত <strong>Web app URL</strong> টি কপি করে বহুব্রীহি অ্যাপের সেটিংসের ইনপুটে পেস্ট করে "শিট কানেক্ট করুন" বাটনে ক্লিক করুন। ব্যস, আপনার অ্যাপ এখন ক্লাউডের সাথে যুক্ত!</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal('modal-sheet-guide')">ঠিক আছে</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 6: GENERATE MONTHLY SCHEDULE -->
+    <div class="modal-overlay" id="modal-generate-month">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-calendar-plus text-primary"></i> নতুন মাসের শিডিউল তৈরি করুন</h3>
+                <button class="btn-close-modal" onclick="closeModal('modal-generate-month')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>কোন মাসের শিডিউল তৈরি করতে চান? *</label>
+                    <select id="genMonthInput" class="form-select">
+                        <option value="11-2026">নভেম্বর ২০২৬ (চলতি মাস)</option>
+                        <option value="12-2026">ডিসেম্বর ২০২৬ (নতুন মাস)</option>
+                        <option value="01-2027">জানুয়ারি ২০২৭</option>
+                        <option value="02-2027">ফেব্রুয়ারি ২০২৭</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>রোটেশন শুরু হবে কোন সদস্য থেকে?</label>
+                    <select id="genStartMemberSelect" class="form-select">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+                <div class="form-group-checkbox">
+                    <input type="checkbox" id="genAutoSyncSheet" checked>
+                    <label for="genAutoSyncSheet">তৈরির সাথে সাথে গুগল শিটে পাঠিয়ে দিন</label>
+                </div>
+                <p class="text-muted" style="margin-top:10px; font-size:0.85rem;">
+                    * এটি পুরো মাসের ১ তারিখ থেকে শেষ তারিখ পর্যন্ত রুমের সদস্যদের পর্যায়ক্রমিক রোটেশন স্বয়ংক্রিয়ভাবে তৈরি করবে।
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-generate-month')">বাতিল</button>
+                <button class="btn btn-primary" onclick="submitGenerateMonth()">শিডিউল জেনারেট করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-circle-check toast-icon"></i>
+        <span id="toastMessage">অ্যাকশন সফল হয়েছে!</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
